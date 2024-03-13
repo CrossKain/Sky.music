@@ -120,12 +120,14 @@
     stroke: #696969;
   }
   
-  .playerBbtnShuffle {
+  .playerBbtShuffle {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
+    
+    display: flex;
     align-items: center;
   }
   
@@ -134,6 +136,7 @@
     height: 12px;
     fill: transparent;
     stroke: #696969;
+    
   }
   
   .playerTrackPlay {

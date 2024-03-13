@@ -14,31 +14,31 @@ export default function Bar() {
             <div className={styles.playerControls}>
               <div className={styles.playerBtnPrev}>
                 <svg className={styles.playerBtnPrevSvg}>
-                  <use href="image/icon/sprite.svg#iconprev"></use>
+                  <use href="image/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
               <div className={classNames(styles.playerBtnPlay, styles._btn)}>
                 <svg className={styles.playerBtnPlaySvg}>
-                  <use href="/image/icon/sprite.svg#iconplay"></use>
+                  <use href="/image/icon/sprite.svg#icon-play"></use>
                 </svg>
               </div>
               <div className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
-                  <use href="/image/icon/sprite.svg#iconnext"></use>
+                  <use href="/image/icon/sprite.svg#icon-next"></use>
                 </svg>
               </div>
               <div
                 className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
               >
                 <svg className={styles.playerBtnRepeatSvg}>
-                  <use href="/image/icon/sprite.svg#iconrepeat"></use>
+                  <use href="/image/icon/sprite.svg#icon-repeat"></use>
                 </svg>
               </div>
               <div
-                className={classNames(styles.playerbtnshuffle, styles._btnicon)}
+                className={classNames(styles.playerBtnShuffle, styles._btnIcon)}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
-                  <use href="/image/icon/sprite.svg#iconshuffle"></use>
+                  <use href="/image/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>
             </div>
@@ -49,7 +49,7 @@ export default function Bar() {
               <div className={styles.trackPlayContain}>
                 <div className={styles.trackPlayImage}>
                   <svg className={styles.trackPlaySvg}>
-                    <use href="/image/icon/sprite.svg#iconnote"></use>
+                    <use href="/image/icon/sprite.svg#icon-note"></use>
                   </svg>
                 </div>
                 <div className={styles.trackPlayAuthor}>
@@ -70,14 +70,14 @@ export default function Bar() {
                 className={classNames(styles.trackPlayLike, styles._btnIcon)}
               >
                 <svg className={styles.trackPlayLikeSvg}>
-                  <use href="/image/icon/sprite.svg#iconlike"></use>
+                  <use href="/image/icon/sprite.svg#icon-like"></use>
                 </svg>
               </div>
               <div
                 className={classNames(styles.trackPlayDislike, styles._btnIcon)}
               >
                 <svg className={styles.trackPlayDislikeSvg}>
-                  <use href="/image/icon/sprite.svg#icondislike"></use>
+                  <use href="/image/icon/sprite.svg#icon-dislike"></use>
                 </svg>
               </div>
             </div>
