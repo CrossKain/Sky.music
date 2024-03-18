@@ -1,12 +1,21 @@
+"use client";
 import styles from "@components/PlayListItem/PlayListItem.module.css";
 import classNames from "classnames";
+import { TTrack } from "../../types";
 type Props = {
   name: string;
   time: number;
   author: string;
   album: string;
+  setTrack: (param: TTrack) => void;
 };
-export default function PlayListItem({ name, time, author, album }: Props) {
+export default function PlayListItem({
+  name,
+  time,
+  author,
+  album,
+  setTrack,
+}: Props) {
   return (
     <div className={styles.playlistItem}>
       <div className={classNames(styles.playlistTrack, styles.track)}>
@@ -16,11 +25,14 @@ export default function PlayListItem({ name, time, author, album }: Props) {
               <use href="image/icon/sprite.svg#icon-note"></use>
             </svg>
           </div>
-          <div className={styles.trackTitleText}>
-            <a className={styles.trackTitleLink} href="http://">
-              {name}
-              <span className={styles.trackTitleSpan}></span>
-            </a>
+          <div
+            onClick={() =>
+              setTrack({ name, duration_in_seconds: time, album, author })
+            }
+            className={styles.trackTitleText}
+          >
+            {name}
+            <span className={styles.trackTitleSpan}></span>
           </div>
         </div>
         <div className={styles.trackAuthor}>

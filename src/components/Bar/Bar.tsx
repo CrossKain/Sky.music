@@ -3,11 +3,15 @@
 import classNames from "classnames";
 import styles from "./Bar.module.css";
 import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
-
-export default function Bar() {
+import { TTrack } from "../../types";
+type Props = {
+  track: TTrack | null;
+};
+export default function Bar({ track }: Props) {
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
+        <audio controls></audio>
         <div className={styles.barPlayerProgress}></div>
         <div className={styles.barPlayerBlock}>
           <div className={classNames(styles.barPlayer, styles.player)}>
@@ -54,12 +58,12 @@ export default function Bar() {
                 </div>
                 <div className={styles.trackPlayAuthor}>
                   <a className={styles.trackPlayAuthorLink} href="http://">
-                    Ты та...{" "}
+                    {track?.author}
                   </a>
                 </div>
                 <div className={styles.trackPlayAlbum}>
                   <a className={styles.trackPlayAlbumLink} href="http://">
-                    Баста
+                    {track?.name}
                   </a>
                 </div>
               </div>

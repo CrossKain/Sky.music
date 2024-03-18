@@ -2,13 +2,16 @@ import ContentPlaylist from "@components/ContentPlaylist/ContentPlaylist";
 import classNames from "classnames";
 import styles from "@components/CentrBlock/CentrBlock.module.css";
 import FilterBlock from "@components/FilterBlock/FilterBlock";
-
-export default async function CentrBlock() {
+import { TTrack } from "../../types";
+type Props = {
+  setTrack: (param: TTrack) => void;
+};
+export default async function CentrBlock({ setTrack }: Props) {
   const tracks = await getData();
   return (
     <div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
       <div className={classNames(styles.centerBlockSearch, styles.search)}>
-        <svg className={styles.searchSvg}>
+        <svg onClick={() => setTrack("gfgf")} className={styles.searchSvg}>
           <use href="/image/icon/sprite.svg#icon-search"></use>
         </svg>
         <input
@@ -42,7 +45,7 @@ export default async function CentrBlock() {
             </svg>
           </div>
         </div>
-        <ContentPlaylist tracks={tracks} />
+        <ContentPlaylist tracks={tracks} setTrack={setTrack} />
       </div>
     </div>
   );
