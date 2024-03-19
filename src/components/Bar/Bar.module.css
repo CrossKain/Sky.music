@@ -4,6 +4,7 @@
     left: 0;
     width: 100%;
     background: rgba(28, 28, 28, 0.5);
+    
   }
   
   .barContent {
@@ -34,6 +35,8 @@
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
+    background: rgb(28, 28, 28);
+
   }
   
   .barPlayer {
@@ -50,6 +53,7 @@
     -webkit-box-pack: start;
     -ms-flex-pack: start;
     justify-content: flex-start;
+    
   }
   
  
