@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Bar from "@components/Bar/Bar";
 import CentrBlock from "@components/CentrBlock/CentrBlock";
 import MainSlideBar from "@components/MainSlideBar/MainSlideBar";
@@ -16,7 +16,7 @@ export default function Main() {
         <CentrBlock setTrack={setTrack} />
         <MainSlideBar />
       </main>
-      <Bar track={track} />
+      {track && <Bar track={track} />}
       <footer className="footer"></footer>
     </>
   );

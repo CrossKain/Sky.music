@@ -4,15 +4,73 @@ import classNames from "classnames";
 import styles from "./Bar.module.css";
 import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
 import { TTrack } from "../../types";
+import ProgressBar from "@components/ProgressBar/ProgressBar";
+import { useEffect, useRef, useState } from "react";
+
 type Props = {
   track: TTrack | null;
 };
 export default function Bar({ track }: Props) {
+  const audioRef = useRef<null | HTMLAudioElement>(null);
+  const [isPlay, setIsPlay] = useState(true);
+  const [isLoop, setIsLoop] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsLeft = Math.floor(seconds % 60);
+    return `${minutes}:${secondsLeft.toString().padStart(2, "0")}`;
+  };
+
+  useEffect(() => {
+    audioRef.current?.play();
+  }, []);
+  useEffect(() => {
+    audioRef.current?.addEventListener("timeupdate", updateTime);
+    return () => {
+      audioRef.current?.removeEventListener("timeupdate", updateTime);
+    };
+  }, []);
+  const updateTime = () => {
+    setCurrentTime(audioRef.current!.currentTime);
+  };
+  const handlePlay = () => {
+    audioRef.current?.play();
+    setIsPlay(true);
+  };
+  const handlePause = () => {
+    audioRef.current?.pause();
+    setIsPlay(false);
+  };
+
+  const handleLoop = () => {
+    if (audioRef.current) {
+      audioRef.current.loop = !isLoop;
+      setIsLoop(!isLoop);
+    }
+  };
+  const handleVolume = (value) => {
+    if (audioRef.current) {
+      audioRef.current.volume = value / 100;
+    }
+  };
+  const rewindTrack = (value) => {
+    setCurrentTime(value);
+    audioRef.current.currentTime = value;
+  };
+
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
-        <audio controls></audio>
-        <div className={styles.barPlayerProgress}></div>
+        <audio src={track?.track_file} ref={audioRef}></audio>
+        <div className={styles.barTime}>
+          {formatTime(currentTime)} / {formatTime(track?.duration_in_seconds)}
+        </div>
+        <ProgressBar
+          onChange={rewindTrack}
+          value={currentTime}
+          max={track?.duration_in_seconds}
+        />
+
         <div className={styles.barPlayerBlock}>
           <div className={classNames(styles.barPlayer, styles.player)}>
             <div className={styles.playerControls}>
@@ -23,7 +81,17 @@ export default function Bar({ track }: Props) {
               </div>
               <div className={classNames(styles.playerBtnPlay, styles._btn)}>
                 <svg className={styles.playerBtnPlaySvg}>
-                  <use href="/image/icon/sprite.svg#icon-play"></use>
+                  {isPlay ? (
+                    <use
+                      onClick={handlePause}
+                      href="/image/icon/sprite.svg#icon-pause"
+                    ></use>
+                  ) : (
+                    <use
+                      onClick={handlePlay}
+                      href="/image/icon/sprite.svg#icon-play"
+                    ></use>
+                  )}
                 </svg>
               </div>
               <div className={styles.playerBtnNext}>
@@ -32,10 +100,16 @@ export default function Bar({ track }: Props) {
                 </svg>
               </div>
               <div
+                onClick={handleLoop}
                 className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
               >
                 <svg className={styles.playerBtnRepeatSvg}>
-                  <use href="/image/icon/sprite.svg#icon-repeat"></use>
+                  {isLoop ? (
+                    <use href="/image/icon/sprite.svg#icon_repeatOn"></use>
+                  ) : (
+                    <use href="/image/icon/sprite.svg#icon-repeat"></use>
+                  )}
+                  
                 </svg>
               </div>
               <div
@@ -86,7 +160,7 @@ export default function Bar({ track }: Props) {
               </div>
             </div>
           </div>
-          <BarVolumeBlock />
+          <BarVolumeBlock handleVolume={handleVolume} />
         </div>
       </div>
     </div>

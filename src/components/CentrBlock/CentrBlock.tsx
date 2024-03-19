@@ -3,15 +3,20 @@ import classNames from "classnames";
 import styles from "@components/CentrBlock/CentrBlock.module.css";
 import FilterBlock from "@components/FilterBlock/FilterBlock";
 import { TTrack } from "../../types";
+import { useEffect, useState } from "react";
 type Props = {
   setTrack: (param: TTrack) => void;
 };
-export default async function CentrBlock({ setTrack }: Props) {
-  const tracks = await getData();
+export default function CentrBlock({ setTrack }: Props) {
+  const [tracks, setTracks] = useState([]);
+  useEffect(() => {
+    getData().then((data) => setTracks(data));
+  }, []);
+
   return (
     <div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
       <div className={classNames(styles.centerBlockSearch, styles.search)}>
-        <svg onClick={() => setTrack("gfgf")} className={styles.searchSvg}>
+        <svg className={styles.searchSvg}>
           <use href="/image/icon/sprite.svg#icon-search"></use>
         </svg>
         <input

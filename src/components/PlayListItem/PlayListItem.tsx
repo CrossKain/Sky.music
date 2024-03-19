@@ -7,7 +7,7 @@ type Props = {
   time: number;
   author: string;
   album: string;
-  setTrack: (param: TTrack) => void;
+  setTrack: () => void;
 };
 export default function PlayListItem({
   name,
@@ -25,26 +25,13 @@ export default function PlayListItem({
               <use href="image/icon/sprite.svg#icon-note"></use>
             </svg>
           </div>
-          <div
-            onClick={() =>
-              setTrack({ name, duration_in_seconds: time, album, author })
-            }
-            className={styles.trackTitleText}
-          >
+          <div onClick={setTrack} className={styles.trackTitleText}>
             {name}
             <span className={styles.trackTitleSpan}></span>
           </div>
         </div>
-        <div className={styles.trackAuthor}>
-          <a className={styles.trackAuthorLink} href="http://">
-            {author}
-          </a>
-        </div>
-        <div className={styles.trackAlbum}>
-          <a className={styles.trackAlbumLink} href="http://">
-            {album}
-          </a>
-        </div>
+        <div onClick={setTrack} className={styles.trackAuthor}>{author}</div>
+        <div onClick={setTrack} className={styles.trackAlbum}>{album}</div>
         <div className={styles.trackTime}>
           <svg className={styles.trackTimeSvg}>
             <use href="image/icon/sprite.svg#icon-like"></use>

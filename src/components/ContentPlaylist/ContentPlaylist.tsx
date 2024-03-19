@@ -15,7 +15,7 @@ export default function ContentPlaylist({
     <div className={classNames(styles.contentPlaylist, styles.playlist)}>
       {tracks?.map((track) => (
         <PlayListItem
-          setTrack={setTrack}
+          setTrack={() => setTrack(track)}
           key={track.id}
           name={track.name}
           author={track.author}

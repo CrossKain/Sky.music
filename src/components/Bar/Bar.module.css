@@ -292,3 +292,8 @@
     width: 109px;
   }
   
+  .barTime {
+    display: flex;
+    flex-direction: row-reverse;
+    color:rgb(0, 123, 255)
+  }
