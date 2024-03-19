@@ -17,7 +17,7 @@ export default function PlayListItem({
   setTrack,
 }: Props) {
   return (
-    <div className={styles.playlistItem}>
+    <div onClick={setTrack} className={styles.playlistItem}>
       <div className={classNames(styles.playlistTrack, styles.track)}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
