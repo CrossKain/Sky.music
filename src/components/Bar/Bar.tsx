@@ -74,7 +74,7 @@ export default function Bar({ track }: Props) {
         <div className={styles.barPlayerBlock}>
           <div className={classNames(styles.barPlayer, styles.player)}>
             <div className={styles.playerControls}>
-              <div className={styles.playerBtnPrev}>
+              <div className={styles.playerBtnPrev} onClick={() => alert('Еще не реализовано')}>
                 <svg className={styles.playerBtnPrevSvg}>
                   <use href="image/icon/sprite.svg#icon-prev"></use>
                 </svg>
@@ -94,7 +94,7 @@ export default function Bar({ track }: Props) {
                   )}
                 </svg>
               </div>
-              <div className={styles.playerBtnNext}>
+              <div className={styles.playerBtnNext} onClick={() => alert('Еще не реализовано')}>
                 <svg className={styles.playerBtnNextSvg}>
                   <use href="/image/icon/sprite.svg#icon-next"></use>
                 </svg>
@@ -115,7 +115,7 @@ export default function Bar({ track }: Props) {
               <div
                 className={classNames(styles.playerBtnShuffle, styles._btnIcon)}
               >
-                <svg className={styles.playerBtnShuffleSvg}>
+                <svg className={styles.playerBtnShuffleSvg} onClick={() => alert('Еще не реализовано')}>
                   <use href="/image/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>
