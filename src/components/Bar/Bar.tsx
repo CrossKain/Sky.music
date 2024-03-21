@@ -25,6 +25,8 @@ export default function Bar({ track }: Props) {
     audioRef.current?.play();
   }, []);
   useEffect(() => {
+    audioRef.current?.addEventListener("pause", () => setIsPlay(false));
+    audioRef.current?.addEventListener("play", () => setIsPlay(true));
     audioRef.current?.addEventListener("timeupdate", updateTime);
     return () => {
       audioRef.current?.removeEventListener("timeupdate", updateTime);
@@ -61,20 +63,23 @@ export default function Bar({ track }: Props) {
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
-        <audio src={track?.track_file} ref={audioRef}></audio>
+        <audio autoPlay src={track?.track_file} ref={audioRef}></audio>
         <div className={styles.barTime}>
-          {formatTime(currentTime)} / {formatTime(track?.duration_in_seconds)}
+          {formatTime(currentTime)} / {formatTime(audioRef.current?.duration)}
         </div>
         <ProgressBar
           onChange={rewindTrack}
           value={currentTime}
-          max={track?.duration_in_seconds}
+          max={audioRef.current?.duration}
         />
 
         <div className={styles.barPlayerBlock}>
           <div className={classNames(styles.barPlayer, styles.player)}>
             <div className={styles.playerControls}>
-              <div className={styles.playerBtnPrev} onClick={() => alert('Еще не реализовано')}>
+              <div
+                className={styles.playerBtnPrev}
+                onClick={() => alert("Еще не реализовано")}
+              >
                 <svg className={styles.playerBtnPrevSvg}>
                   <use href="image/icon/sprite.svg#icon-prev"></use>
                 </svg>
@@ -94,7 +99,10 @@ export default function Bar({ track }: Props) {
                   )}
                 </svg>
               </div>
-              <div className={styles.playerBtnNext} onClick={() => alert('Еще не реализовано')}>
+              <div
+                className={styles.playerBtnNext}
+                onClick={() => alert("Еще не реализовано")}
+              >
                 <svg className={styles.playerBtnNextSvg}>
                   <use href="/image/icon/sprite.svg#icon-next"></use>
                 </svg>
@@ -109,13 +117,15 @@ export default function Bar({ track }: Props) {
                   ) : (
                     <use href="/image/icon/sprite.svg#icon-repeat"></use>
                   )}
-                  
                 </svg>
               </div>
               <div
                 className={classNames(styles.playerBtnShuffle, styles._btnIcon)}
               >
-                <svg className={styles.playerBtnShuffleSvg} onClick={() => alert('Еще не реализовано')}>
+                <svg
+                  className={styles.playerBtnShuffleSvg}
+                  onClick={() => alert("Еще не реализовано")}
+                >
                   <use href="/image/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>
