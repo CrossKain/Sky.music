@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 type Props = {
   setTrack: (param: TTrack) => void;
 };
-export default function CentrBlock({ setTrack }: Props) {
+export default function CentrBlock() {
   const [tracks, setTracks] = useState([]);
   useEffect(() => {
     getData().then((data) => setTracks(data));
@@ -50,7 +50,7 @@ export default function CentrBlock({ setTrack }: Props) {
             </svg>
           </div>
         </div>
-        <ContentPlaylist tracks={tracks} setTrack={setTrack} />
+        <ContentPlaylist tracks={tracks} />
       </div>
     </div>
   );

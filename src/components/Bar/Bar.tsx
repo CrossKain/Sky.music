@@ -6,16 +6,28 @@ import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
 import { TTrack } from "../../types";
 import ProgressBar from "@components/ProgressBar/ProgressBar";
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useDispatch } from "react-redux";
+import {
+  setNextTrack,
+  setPause,
+  setPlay,
+  setPrevTrack,
+  setShuffle,
+} from "../../store/features/tracks/tracksSlice";
 
 type Props = {
   track: TTrack | null;
 };
-export default function Bar({ track }: Props) {
+export default function Bar() {
   const audioRef = useRef<null | HTMLAudioElement>(null);
-  const [isPlay, setIsPlay] = useState(true);
+  const dispatch = useAppDispatch();
   const [isLoop, setIsLoop] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const formatTime = (seconds) => {
+  const { track, isPlaying, isShuffle } = useAppSelector(
+    (state) => state.tracks
+  );
+  const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secondsLeft = Math.floor(seconds % 60);
     return `${minutes}:${secondsLeft.toString().padStart(2, "0")}`;
@@ -25,8 +37,9 @@ export default function Bar({ track }: Props) {
     audioRef.current?.play();
   }, []);
   useEffect(() => {
-    audioRef.current?.addEventListener("pause", () => setIsPlay(false));
-    audioRef.current?.addEventListener("play", () => setIsPlay(true));
+    audioRef.current?.addEventListener("pause", () => dispatch(setPause()));
+    audioRef.current?.addEventListener("play", () => dispatch(setPlay()));
+    audioRef.current?.addEventListener("ended", () => dispatch(setNextTrack()));
     audioRef.current?.addEventListener("timeupdate", updateTime);
     return () => {
       audioRef.current?.removeEventListener("timeupdate", updateTime);
@@ -37,11 +50,11 @@ export default function Bar({ track }: Props) {
   };
   const handlePlay = () => {
     audioRef.current?.play();
-    setIsPlay(true);
+    dispatch(setPlay());
   };
   const handlePause = () => {
     audioRef.current?.pause();
-    setIsPlay(false);
+    dispatch(setPause());
   };
 
   const handleLoop = () => {
@@ -50,14 +63,16 @@ export default function Bar({ track }: Props) {
       setIsLoop(!isLoop);
     }
   };
-  const handleVolume = (value) => {
+  const handleVolume = (value: number) => {
     if (audioRef.current) {
       audioRef.current.volume = value / 100;
     }
   };
-  const rewindTrack = (value) => {
+  const rewindTrack = (value: number) => {
     setCurrentTime(value);
-    audioRef.current.currentTime = value;
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;
+    }
   };
 
   return (
@@ -65,12 +80,13 @@ export default function Bar({ track }: Props) {
       <div className={styles.barContent}>
         <audio autoPlay src={track?.track_file} ref={audioRef}></audio>
         <div className={styles.barTime}>
-          {formatTime(currentTime)} / {formatTime(audioRef.current?.duration)}
+          {formatTime(currentTime)} /{" "}
+          {audioRef.current && formatTime(audioRef.current?.duration)}
         </div>
         <ProgressBar
           onChange={rewindTrack}
           value={currentTime}
-          max={audioRef.current?.duration}
+          max={audioRef.current?.duration ?? 0}
         />
 
         <div className={styles.barPlayerBlock}>
@@ -78,30 +94,27 @@ export default function Bar({ track }: Props) {
             <div className={styles.playerControls}>
               <div
                 className={styles.playerBtnPrev}
-                onClick={() => alert("Еще не реализовано")}
+                onClick={() => dispatch(setPrevTrack())}
               >
                 <svg className={styles.playerBtnPrevSvg}>
                   <use href="image/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
-              <div className={classNames(styles.playerBtnPlay, styles._btn)}>
+              <div
+                onClick={isPlaying ? handlePause : handlePlay}
+                className={classNames(styles.playerBtnPlay, styles._btn)}
+              >
                 <svg className={styles.playerBtnPlaySvg}>
-                  {isPlay ? (
-                    <use
-                      onClick={handlePause}
-                      href="/image/icon/sprite.svg#icon-pause"
-                    ></use>
+                  {isPlaying ? (
+                    <use href="/image/icon/sprite.svg#icon-pause"></use>
                   ) : (
-                    <use
-                      onClick={handlePlay}
-                      href="/image/icon/sprite.svg#icon-play"
-                    ></use>
+                    <use href="/image/icon/sprite.svg#icon-play"></use>
                   )}
                 </svg>
               </div>
               <div
                 className={styles.playerBtnNext}
-                onClick={() => alert("Еще не реализовано")}
+                onClick={() => dispatch(setNextTrack())}
               >
                 <svg className={styles.playerBtnNextSvg}>
                   <use href="/image/icon/sprite.svg#icon-next"></use>
@@ -120,13 +133,15 @@ export default function Bar({ track }: Props) {
                 </svg>
               </div>
               <div
+                onClick={() => dispatch(setShuffle(!isShuffle))}
                 className={classNames(styles.playerBtnShuffle, styles._btnIcon)}
               >
-                <svg
-                  className={styles.playerBtnShuffleSvg}
-                  onClick={() => alert("Еще не реализовано")}
-                >
-                  <use href="/image/icon/sprite.svg#icon-shuffle"></use>
+                <svg className={styles.playerBtnShuffleSvg}>
+                  {!isShuffle ? (
+                    <use href="/image/icon/sprite.svg#icon-shuffle"></use>
+                  ) : (
+                    <use href="/image/icon/sprite.svg#icon-InShuffle"></use>
+                  )}
                 </svg>
               </div>
             </div>

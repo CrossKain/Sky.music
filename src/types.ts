@@ -8,7 +8,7 @@ export type TTrack = {
     album: string,
     logo: null,
     track_file: string,
-    stared_user: TStaredUser[] | null;
+    stared_user?: TStaredUser[] | null;
 }
 
 export type TStaredUser = {

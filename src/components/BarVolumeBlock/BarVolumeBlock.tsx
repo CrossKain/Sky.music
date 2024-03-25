@@ -1,15 +1,18 @@
 "use client";
 import styles from "@components/BarVolumeBlock/BarVolumeBlock.module.css";
 import classNames from "classnames";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+type Props = {
+  handleVolume: (volume: number) => void;
+};
 
-export default function BarVolumeBlock({ handleVolume }) {
+export default function BarVolumeBlock({ handleVolume }: Props) {
   const [volume, setVolume] = useState("");
 
-  const onChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     let newVolume = e.target.value;
     setVolume(newVolume);
-    handleVolume(+newVolume)
+    handleVolume(+newVolume);
   };
   return (
     <div className={classNames(styles.barVolumeBlock, styles.volume)}>

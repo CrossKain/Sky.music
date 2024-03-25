@@ -6,17 +6,19 @@ import Nav from "@components/Nav/Nav";
 import styles from "@components/Main/Main.module.css";
 import { useState } from "react";
 import { TTrack } from "../../types";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
 export default function Main() {
-  const [track, setTrack] = useState<TTrack | null>(null);
+  const { track } = useAppSelector((state) => state.tracks);
+  
   return (
     <>
       <main className={styles.main}>
         <Nav />
-        <CentrBlock setTrack={setTrack} />
+        <CentrBlock  />
         <MainSlideBar />
       </main>
-      {track && <Bar track={track} />}
+      {track && <Bar />}
       <footer className="footer"></footer>
     </>
   );

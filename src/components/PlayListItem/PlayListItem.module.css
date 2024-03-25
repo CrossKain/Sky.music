@@ -175,3 +175,23 @@
     text-align: right;
     color: #696969;
   }
+
+  .trackImagePlaying{
+    position: absolute;
+width: 16px;
+height: 16px;
+border-radius: 8px;
+background: rgb(0, 123, 255);
+  }
+  @keyframes trackAnimation{
+    0% {
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.4;
+    }}
+  .trackAnimation{
+    animation: trackAnimation ease-in-out 2s infinite;
+  }
+ 

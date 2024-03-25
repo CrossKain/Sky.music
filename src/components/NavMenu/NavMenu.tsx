@@ -2,10 +2,12 @@ import classNames from "classnames";
 import styles from "@components/NavMenu/NavMenu.module.css";
 import Link from "next/link";
 import { FC } from "react";
+import { useAppSelector } from "../../store/store";
 type TNavMenu = {
   isOpen: boolean;
 };
 export const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
+  const { isAuth } = useAppSelector((state) => state.auth);
   return (
     <>
       {isOpen && (
@@ -18,7 +20,7 @@ export const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
             </li>
             <li className={styles.menuItem}>Мой плейлист</li>
             <li className={styles.menuItem}>
-              <Link href="/signin">Войти</Link>
+              <Link href="/signin">{isAuth ? "Выйти" : "Войти"}</Link>
             </li>
           </ul>
         </div>

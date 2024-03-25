@@ -1,14 +1,15 @@
 import styles from "@components/ProgressBar/ProgressBar.module.css";
+import { ChangeEvent } from "react";
 type Props = {
   max: number;
-  value: string;
+  value: number;
 
-  onChange: () => void;
+  onChange: (value: number) => void;
 };
 export default function ProgressBar({ max, value, onChange }: Props) {
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value
-        onChange(newValue)
+        onChange(+newValue)
     }
   return (
     <input
