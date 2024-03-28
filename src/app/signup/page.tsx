@@ -24,7 +24,7 @@ export default function SignUp() {
   const onClick = () => {
     const { email, password, repeatPassword, username } = userData;
     if (password !== repeatPassword) {
-      alert("пароли не совпадают, долбоеп");
+      alert("пароли не совпадают");
       return;
     }
     registration({ email, password, username })
