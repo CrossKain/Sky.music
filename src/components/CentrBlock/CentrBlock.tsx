@@ -4,15 +4,57 @@ import styles from "@components/CentrBlock/CentrBlock.module.css";
 import FilterBlock from "@components/FilterBlock/FilterBlock";
 import { TTrack } from "../../types";
 import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  setInitialTracks,
+  setSearch,
+} from "../../store/features/tracks/tracksSlice";
 type Props = {
   setTrack: (param: TTrack) => void;
 };
 export default function CentrBlock() {
   const [tracks, setTracks] = useState([]);
-  useEffect(() => {
-    getData().then((data) => setTracks(data));
-  }, []);
+  const dispatch = useAppDispatch();
+  const { filteredTracks, filters } = useAppSelector((state) => state.tracks);
+  const [searchValue, setSearchValue] = useState("");
 
+  const filterTracks = () => {
+    let array = [...filteredTracks];
+    
+    if (filters.genres.length) {
+      array = array.filter((el) => filters.genres.includes(el.genre.toLowerCase()));
+      console.log(array);
+    }
+    if (filters.authors.length) {
+      array = array.filter((el) => filters.authors.includes(el.author.toLowerCase()));
+      console.log(array);
+    }
+
+    switch (filters.order) {
+      case "Сначала новые":
+        array.sort(
+          (a, b) => new Date(b.release_date) - new Date(a.release_date)
+        );
+        break;
+      case "Сначала старые":
+        array.sort(
+          (a, b) => new Date(a.release_date) - new Date(b.release_date)
+        );
+        break;
+    }
+    return array;
+  };
+  const trackArray = filterTracks();
+  useEffect(() => {
+    getData().then((data) => {
+      setTracks(data);
+      dispatch(setInitialTracks(data));
+      dispatch(setSearch({ searchValue }));
+    });
+  }, []);
+  useEffect(() => {
+    dispatch(setSearch({ searchValue }));
+  }, [searchValue]);
   return (
     <div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
       <div className={classNames(styles.centerBlockSearch, styles.search)}>
@@ -20,6 +62,8 @@ export default function CentrBlock() {
           <use href="/image/icon/sprite.svg#icon-search"></use>
         </svg>
         <input
+          onChange={(event) => setSearchValue(event.target.value)}
+          value={searchValue}
           className={styles.searchText}
           type="search"
           placeholder="Поиск"
@@ -50,7 +94,7 @@ export default function CentrBlock() {
             </svg>
           </div>
         </div>
-        <ContentPlaylist tracks={tracks} />
+        <ContentPlaylist tracks={trackArray} />
       </div>
     </div>
   );

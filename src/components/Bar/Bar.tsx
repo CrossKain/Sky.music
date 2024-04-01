@@ -5,7 +5,7 @@ import styles from "./Bar.module.css";
 import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
 import { TTrack } from "../../types";
 import ProgressBar from "@components/ProgressBar/ProgressBar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { useDispatch } from "react-redux";
 import {
@@ -45,9 +45,9 @@ export default function Bar() {
       audioRef.current?.removeEventListener("timeupdate", updateTime);
     };
   }, []);
-  const updateTime = () => {
+  const updateTime = useCallback(() => {
     setCurrentTime(audioRef.current!.currentTime);
-  };
+  }, []) 
   const handlePlay = () => {
     audioRef.current?.play();
     dispatch(setPlay());
@@ -63,11 +63,11 @@ export default function Bar() {
       setIsLoop(!isLoop);
     }
   };
-  const handleVolume = (value: number) => {
+  const handleVolume = useCallback((value: number) => {
     if (audioRef.current) {
       audioRef.current.volume = value / 100;
     }
-  };
+  }, [])
   const rewindTrack = (value: number) => {
     setCurrentTime(value);
     if (audioRef.current) {

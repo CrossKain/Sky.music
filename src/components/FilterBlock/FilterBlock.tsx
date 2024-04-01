@@ -5,10 +5,11 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { TTrack } from "../../types";
 import { releaseData } from "../../Lib/const";
+import { useAppSelector } from "../../store/store";
 const filterObj = {
   AUTHORS: "authors",
   GENRES: "genres",
-  RELEASE: "release",
+  ORDER: "order",
 };
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
 export default function FilterBlock({ tracks }: Props) {
   const [authorList, setAuthorList] = useState<string[]>([]);
   const [ganresList, setGanresList] = useState<string[]>([]);
-
+  const { filters } = useAppSelector((state) => state.tracks);
   const [filterState, setFilterState] = useState<string | null>(null);
   const handleClick = (filter: string) => {
     if (filterState === filter) {
@@ -41,7 +42,13 @@ export default function FilterBlock({ tracks }: Props) {
   return (
     <div className={classNames(styles.centerBlockFilter, styles.filter)}>
       <div className={styles.filterTitle}>Искать по:</div>
+
       <div className={styles.filterButtonWrapper}>
+        {filters[filterObj.AUTHORS].length ? (
+          <span className={styles.filterButtonSpan}>
+            {filters[filterObj.AUTHORS].length}
+          </span>
+        ): null} 
         <div
           onClick={() => handleClick(filterObj.AUTHORS)}
           className={classNames(
@@ -54,22 +61,31 @@ export default function FilterBlock({ tracks }: Props) {
         >
           исполнителю
         </div>
-        {filterState === filterObj.AUTHORS && <FilterList list={authorList} />}
+        {filterState === filterObj.AUTHORS && (
+          <FilterList filterName={filterObj.AUTHORS} list={authorList} />
+        )}
       </div>
       <div className={styles.filterButtonWrapper}>
         <div
-          onClick={() => handleClick(filterObj.RELEASE)}
+          onClick={() => handleClick(filterObj.ORDER)}
           className={classNames(
             styles.filterButton,
-            { [styles.active]: filterState === filterObj.RELEASE },
+            { [styles.active]: filterState === filterObj.ORDER },
             styles.btnText
           )}
         >
           году выпуска
         </div>
-        {filterState === filterObj.RELEASE && <FilterList list={releaseData} />}
+        {filterState === filterObj.ORDER && (
+          <FilterList filterName={filterObj.ORDER} list={releaseData} />
+        )}
       </div>
       <div className={styles.filterButtonWrapper}>
+        {filters[filterObj.GENRES].length ? (
+          <span className={styles.filterButtonSpan}>
+            {filters[filterObj.GENRES].length}
+          </span>
+        ): null}
         <div
           onClick={() => handleClick(filterObj.GENRES)}
           className={classNames(
@@ -82,7 +98,9 @@ export default function FilterBlock({ tracks }: Props) {
         >
           жанру
         </div>
-        {filterState === filterObj.GENRES && <FilterList list={ganresList} />}
+        {filterState === filterObj.GENRES && (
+          <FilterList filterName={filterObj.GENRES} list={ganresList} />
+        )}
       </div>
     </div>
   );

@@ -2,66 +2,114 @@ import { createSlice } from "@reduxjs/toolkit";
 import { TTrack } from "../../../types";
 
 type TTracksState = {
-    track: null | TTrack,
-    playList: TTrack[]
-    isShuffle: boolean,
-    isPlaying: boolean,
-    shufflePlayList: TTrack[]
-}
-const initialState:  TTracksState = {
-    track: null,
-    playList: [],
-    isShuffle: false,
-    isPlaying: false,
-    shufflePlayList: []
-}
+  track: null | TTrack;
+  playList: TTrack[];
+  isShuffle: boolean;
+  isPlaying: boolean;
+  shufflePlayList: TTrack[];
+  filters: { authors: string[]; genres: string[]; order: string };
+  filteredTracks: TTrack[];
+  initialTracks: TTrack[];
+};
+const initialState: TTracksState = {
+  track: null,
+  playList: [],
+  isShuffle: false,
+  isPlaying: false,
+  shufflePlayList: [],
+  filters: {
+    authors: [],
+    genres: [],
+    order: "По умолчанию",
+  },
+  filteredTracks: [],
+  initialTracks: [],
+};
 const tracksSlice = createSlice({
-    name: 'tracks',
-    initialState,
+  name: "tracks",
+  initialState,
 
-    reducers: {
-        setShuffle:(state, action) => {
-        state.isShuffle = action.payload
-        console.log(action.payload)
-            if (action.payload){
-                const playList = [...state.playList]
-                playList.sort(()=> Math.random()-0.5);
-                console.log(playList)
-                    state.shufflePlayList = playList
-            }
+  reducers: {
+    setShuffle: (state, action) => {
+      state.isShuffle = action.payload;
+      console.log(action.payload);
+      if (action.payload) {
+        const playList = [...state.playList];
+        playList.sort(() => Math.random() - 0.5);
+        console.log(playList);
+        state.shufflePlayList = playList;
+      }
     },
-    setNextTrack:(state) => {
-        const playList = state.isShuffle ? state.shufflePlayList : state.playList;
-        console.log(state.isShuffle)
-        console.log(playList)
-        const index = playList.findIndex((track) => track.id === state.track?.id)
-        const nextIndex = index+1
-        if(playList[nextIndex]){
-            state.track = playList[nextIndex]
-    }},
-    setPrevTrack:(state) => {
-        const playList = state.isShuffle ? state.shufflePlayList : state.playList;
-        const index = playList.findIndex((track) => track.id === state.track?.id)
-        const prevIndex = index-1
-        if(playList[prevIndex]){
-            state.track = playList[prevIndex]
-    }},
+    setFilter: (state, action) => {
+      const { filterName, filterValue } = action.payload;
+      if (filterName === "order") {
+        state.filters.order = filterValue || state.filters.order;
+      } else {
+        if (state.filters[filterName].includes(filterValue.toLowerCase())) {
+          state.filters[filterName] = state.filters[filterName].filter(
+            (item) => item.toLowerCase() !== filterValue.toLowerCase()
+          );
+        } else {
+          state.filters[filterName].push(filterValue.toLowerCase());
+        }
+      }
+    },
+    setSearch: (state, action) => {
+      const playList = [...state.initialTracks];
+      const { searchValue } = action.payload;
+      state.filteredTracks = playList.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.author.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    },
+    setInitialTracks: (state, action) => {
+      state.initialTracks = action.payload;
+    },
+    setNextTrack: (state) => {
+      const playList = state.isShuffle ? state.shufflePlayList : state.playList;
+      console.log(state.isShuffle);
+      console.log(playList);
+      const index = playList.findIndex((track) => track.id === state.track?.id);
+      const nextIndex = index + 1;
+      if (playList[nextIndex]) {
+        state.track = playList[nextIndex];
+      }
+    },
+    setPrevTrack: (state) => {
+      const playList = state.isShuffle ? state.shufflePlayList : state.playList;
+      const index = playList.findIndex((track) => track.id === state.track?.id);
+      const prevIndex = index - 1;
+      if (playList[prevIndex]) {
+        state.track = playList[prevIndex];
+      }
+    },
     setPlayList: (state, action) => {
-        state.playList = action.payload;
-    }    ,
-    setPlay:(state) => {
-        state.isPlaying = true
+      state.playList = action.payload;
+    },
+    setPlay: (state) => {
+      state.isPlaying = true;
     },
     setPause: (state) => {
-        state.isPlaying = false
+      state.isPlaying = false;
     },
-    setCurrentTrack:(state, action )=> {
-        state.track = action.payload;
-        state.isPlaying = true;
-        
-    }       
-}})
+    setCurrentTrack: (state, action) => {
+      state.track = action.payload;
+      state.isPlaying = true;
+    },
+  },
+});
 
-
-export const {setCurrentTrack, setPlay, setPause, setPlayList, setNextTrack, setPrevTrack, setShuffle} = tracksSlice.actions;
+export const {
+  setCurrentTrack,
+  setPlay,
+  setPause,
+  setPlayList,
+  setNextTrack,
+  setPrevTrack,
+  setShuffle,
+  setFilter,
+  setSearch,
+  setInitialTracks,
+} = tracksSlice.actions;
 export default tracksSlice.reducer;

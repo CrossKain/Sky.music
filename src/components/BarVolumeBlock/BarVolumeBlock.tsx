@@ -1,12 +1,12 @@
 "use client";
 import styles from "@components/BarVolumeBlock/BarVolumeBlock.module.css";
 import classNames from "classnames";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 type Props = {
   handleVolume: (volume: number) => void;
 };
 
-export default function BarVolumeBlock({ handleVolume }: Props) {
+const BarVolumeBlock = React.memo(({ handleVolume }: Props) => {
   const [volume, setVolume] = useState("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,4 +37,7 @@ export default function BarVolumeBlock({ handleVolume }: Props) {
       </div>
     </div>
   );
-}
+});
+
+BarVolumeBlock.displayName = "BarVolumeBlock";
+export default BarVolumeBlock;
