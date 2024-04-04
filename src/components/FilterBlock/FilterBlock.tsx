@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { TTrack } from "../../types";
 import { releaseData } from "../../Lib/const";
 import { useAppSelector } from "../../store/store";
-const filterObj = {
-  AUTHORS: "authors" as const,
-  GENRES: "genres" as const,
-  ORDER: "order" as const,
-};
+
+const enum filterObj {
+  AUTHORS = "authors",
+  GENRES = "genres",
+  ORDER = "order",
+}
 
 type Props = {
   tracks: TTrack[] | undefined;
@@ -48,7 +49,7 @@ export default function FilterBlock({ tracks }: Props) {
           <span className={styles.filterButtonSpan}>
             {filters[filterObj.AUTHORS].length}
           </span>
-        ): null} 
+        ) : null}
         <div
           onClick={() => handleClick(filterObj.AUTHORS)}
           className={classNames(
@@ -85,7 +86,7 @@ export default function FilterBlock({ tracks }: Props) {
           <span className={styles.filterButtonSpan}>
             {filters[filterObj.GENRES].length}
           </span>
-        ): null}
+        ) : null}
         <div
           onClick={() => handleClick(filterObj.GENRES)}
           className={classNames(
