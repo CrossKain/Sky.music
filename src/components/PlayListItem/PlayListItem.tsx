@@ -3,6 +3,8 @@ import styles from "@components/PlayListItem/PlayListItem.module.css";
 import classNames from "classnames";
 import { TTrack } from "../../types";
 import { useAppSelector } from "../../store/store";
+import { useSetDisLikeMutation, useSetLikeMutation } from "../../store/API/likeApi";
+
 type Props = {
   name: string;
   time: number;
@@ -10,6 +12,8 @@ type Props = {
   album: string;
   setTrack: () => void;
   isCurrentTrack: boolean;
+  liked: boolean;
+  id: number;
 };
 export default function PlayListItem({
   name,
@@ -18,15 +22,31 @@ export default function PlayListItem({
   album,
   setTrack,
   isCurrentTrack,
+  liked,
+  id,
 }: Props) {
+  const [like] = useSetLikeMutation();
+  const [disLike] = useSetDisLikeMutation();
   const { isPlaying } = useAppSelector((state) => state.tracks);
+
+  const handleLike = () => {
+    if (liked) {
+      disLike({ id });
+    } else {
+      like({ id });
+    }
+  };
   return (
     <div onClick={setTrack} className={styles.playlistItem}>
       <div className={classNames(styles.playlistTrack, styles.track)}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
             {isCurrentTrack ? (
-              <div className={classNames(styles.trackImagePlaying, {[styles.trackAnimation] : isPlaying})}></div>
+              <div
+                className={classNames(styles.trackImagePlaying, {
+                  [styles.trackAnimation]: isPlaying,
+                })}
+              ></div>
             ) : (
               <svg className={styles.trackTitleSvg}>
                 <use href="image/icon/sprite.svg#icon-note"></use>
@@ -45,9 +65,12 @@ export default function PlayListItem({
           {album}
         </div>
         <div className={styles.trackTime}>
-          <svg className={styles.trackTimeSvg}>
-            <use href="image/icon/sprite.svg#icon-like"></use>
-          </svg>
+          <button type="button" onClick={handleLike}>
+            <svg className={styles.trackTimeSvg}>
+              <use href="image/icon/sprite.svg#icon-like"></use>
+            </svg>
+          </button>
+
           <span className={styles.trackTimeText}>{time}</span>
         </div>
       </div>

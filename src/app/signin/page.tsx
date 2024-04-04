@@ -3,12 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../signin/page.module.css";
 import classNames from "classnames";
-import { useLoginMutation } from "../../store/API/authApi";
+import { useGetTokenMutation, useLoginMutation } from "../../store/API/authApi";
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [login] = useLoginMutation();
+  const [getToken] = useGetTokenMutation();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -23,6 +24,12 @@ export default function SignIn() {
     login({ email, password })
       .unwrap()
       .then((response) => {
+        localStorage.setItem("user", JSON.stringify(response)),
+          getToken({ email, password })
+            .unwrap()
+            .then((response) => {
+              localStorage.setItem("token", JSON.stringify(response));
+            });
         router.push("/");
       })
       .catch((error) => {

@@ -7,13 +7,13 @@ import { TTrack } from "../../types";
 import { releaseData } from "../../Lib/const";
 import { useAppSelector } from "../../store/store";
 const filterObj = {
-  AUTHORS: "authors",
-  GENRES: "genres",
-  ORDER: "order",
+  AUTHORS: "authors" as const,
+  GENRES: "genres" as const,
+  ORDER: "order" as const,
 };
 
 type Props = {
-  tracks: TTrack[];
+  tracks: TTrack[] | undefined;
 };
 
 export default function FilterBlock({ tracks }: Props) {
@@ -29,7 +29,7 @@ export default function FilterBlock({ tracks }: Props) {
     }
   };
   useEffect(() => {
-    if (tracks.length) {
+    if (tracks?.length) {
       const authorsArray = tracks.map((track) => track.author);
       const authors = new Set(authorsArray);
       setAuthorList(Array.from(authors));

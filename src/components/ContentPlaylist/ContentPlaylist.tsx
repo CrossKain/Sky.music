@@ -11,6 +11,7 @@ import {
 
 type ContentPlayListProps = {
   tracks: TTrack[];
+  liked?: boolean;
 };
 export default function ContentPlaylist({ tracks }: ContentPlayListProps) {
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ export default function ContentPlaylist({ tracks }: ContentPlayListProps) {
           album={item.album}
           time={item.duration_in_seconds}
           isCurrentTrack={item.id === track?.id}
+          liked={item.liked}
+          id={item.id}
         />
       ))}
     </div>
