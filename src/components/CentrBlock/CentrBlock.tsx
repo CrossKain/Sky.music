@@ -14,11 +14,11 @@ import { useGetAllTracksQuery } from "../../store/API/trackApi";
 type Props = {
   setTrack: (param: TTrack) => void;
 };
-export default function CentrBlock() {
+export default function CentrBlock({ tracks, title }) {
   const dispatch = useAppDispatch();
   const { filteredTracks, filters } = useAppSelector((state) => state.tracks);
   const [searchValue, setSearchValue] = useState("");
-  const { data } = useGetAllTracksQuery();
+ 
 
   const filterTracks = () => {
     let array: TTrack[] = [...filteredTracks];
@@ -39,24 +39,28 @@ export default function CentrBlock() {
     switch (filters.order) {
       case "Сначала новые":
         array.sort(
-          (a, b): number => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
+          (a, b): number =>
+            new Date(b.release_date).getTime() -
+            new Date(a.release_date).getTime()
         );
         break;
       case "Сначала старые":
         array.sort(
-          (a, b): number => new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
+          (a, b): number =>
+            new Date(a.release_date).getTime() -
+            new Date(b.release_date).getTime()
         );
         break;
     }
     return array;
   };
   const trackArray = filterTracks();
-  useEffect(() => {
-    if (data) {
-      dispatch(setInitialTracks(data));
-      dispatch(setSearch({ searchValue }));
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (tracks) {
+  //     dispatch(setInitialTracks(tracks));
+  //     dispatch(setSearch({ searchValue }));
+  //   }
+  // }, [tracks]);
   useEffect(() => {
     dispatch(setSearch({ searchValue }));
   }, [searchValue]);
@@ -75,8 +79,8 @@ export default function CentrBlock() {
           name="search"
         />
       </div>
-      <h2 className={styles.centerBlockH2}>Треки</h2>
-      <FilterBlock tracks={data} />
+      <h2 className={styles.centerBlockH2}>{title}</h2>
+      <FilterBlock tracks={tracks} />
       <div
         className={classNames(
           styles.centerBlockContent,
@@ -95,11 +99,11 @@ export default function CentrBlock() {
           </div>
           <div className={classNames(styles.playlistTitleCol, styles.col04)}>
             <svg className={styles.playlistTitleSvg}>
-              <use href="image/icon/sprite.svg#icon-watch"></use>
+              <use href="/image/icon/sprite.svg#icon-watch"></use>
             </svg>
           </div>
         </div>
-        <ContentPlaylist tracks={trackArray} />
+        <ContentPlaylist tracks={tracks} />
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ export default function PlayListItem({
               ></div>
             ) : (
               <svg className={styles.trackTitleSvg}>
-                <use href="image/icon/sprite.svg#icon-note"></use>
+                <use href="/image/icon/sprite.svg#icon-note"></use>
               </svg>
             )}
           </div>
@@ -67,7 +67,7 @@ export default function PlayListItem({
         <div className={styles.trackTime}>
           <button type="button" onClick={handleLike}>
             <svg className={styles.trackTimeSvg}>
-              <use href="image/icon/sprite.svg#icon-like"></use>
+              <use href="/image/icon/sprite.svg#icon-like"></use>
             </svg>
           </button>
 

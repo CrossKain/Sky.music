@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { TTrack } from "../../types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
@@ -19,6 +20,19 @@ export const likeApi = createApi({
     setDisLike: builder.mutation({
       query: ({ id }) => ({ url: `${id}/favorite/`, method: "DELETE" }),
     }),
+    getFavoriteTracks: builder.query<TTrack[], void>({
+      query: () => `/favorite/all`,
+      transformResponse: (response: TTrack[]) => {
+       
+
+        const tracks = response.map((track) => {
+        
+            return { ...track, liked: true };
+          
+        });
+        return  tracks;
+      },
+    }),
   }),
 });
 
@@ -32,4 +46,4 @@ function getToken() {
     return null;
   }
 }
-export const { useSetLikeMutation, useSetDisLikeMutation } = likeApi;
+export const { useSetLikeMutation, useSetDisLikeMutation, useGetFavoriteTracksQuery } = likeApi;

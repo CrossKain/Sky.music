@@ -37,7 +37,7 @@ export default function SignIn() {
       });
   };
   return (
-    <div className={styles.wrapper}>
+    
       <div className={styles.containerEnter}>
         <div className={styles.modalBlock}>
           <form className={styles.modalFormLogin} action="#">
@@ -80,6 +80,6 @@ export default function SignIn() {
           </form>
         </div>
       </div>
-    </div>
+   
   );
 }

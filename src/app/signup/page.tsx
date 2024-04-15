@@ -37,7 +37,7 @@ export default function SignUp() {
       });
   };
   return (
-    <div className={styles.wrapper}>
+    
       <div className={styles.containerSignup}>
         <div className={styles.modalBlock}>
           <form className={styles.modalFormLogin}>
@@ -90,6 +90,6 @@ export default function SignUp() {
           </form>
         </div>
       </div>
-    </div>
+    
   );
 }

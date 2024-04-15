@@ -97,7 +97,7 @@ export default function Bar() {
                 onClick={() => dispatch(setPrevTrack())}
               >
                 <svg className={styles.playerBtnPrevSvg}>
-                  <use href="image/icon/sprite.svg#icon-prev"></use>
+                  <use href="/image/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
               <div

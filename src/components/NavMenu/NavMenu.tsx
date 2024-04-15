@@ -14,11 +14,13 @@ export const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
         <div className={classNames(styles.navMenu, styles.menu)}>
           <ul className={styles.menuList}>
             <li className={styles.menuItem}>
-              <Link href="/" className={styles.menuLink}>
+              <Link href="/tracks" className={styles.menuLink}>
                 Главное
               </Link>
             </li>
-            <li className={styles.menuItem}>Мой плейлист</li>
+            <li className={styles.menuItem}>
+              <Link href="/tracks/favorite"> Мой плейлист</Link>
+            </li>
             <li className={styles.menuItem}>
               <Link href="/signin">{isAuth ? "Выйти" : "Войти"}</Link>
             </li>

@@ -4,11 +4,11 @@ import { TTrack } from "../../types";
 export const trackApi = createApi({
   reducerPath: "trackApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://skypro-music-api.skyeng.tech/catalog/track/",
+    baseUrl: "https://skypro-music-api.skyeng.tech/catalog/",
   }),
   endpoints: (builder) => ({
     getAllTracks: builder.query<TTrack[], void>({
-      query: () => "/all/",
+      query: () => "track/all/",
       transformResponse: (response: TTrack[]) => {
         const user = getUser();
         let id = user ? user.id : null;
@@ -23,6 +23,24 @@ export const trackApi = createApi({
         });
       },
     }),
+    getCategoryTracks: builder.query<TTrack[], { id: string }>({
+      query: ({ id }) => `selection/${id}`,
+      transformResponse: (response: TTrack[]) => {
+        const user = getUser();
+        let id = user ? user.id : null;
+
+        const tracks = response.items.map((track) => {
+          const isLiked = track.stared_user?.find((el) => el.id === id);
+          if (isLiked) {
+            return { ...track, liked: true };
+          } else {
+            return { ...track, liked: false };
+          }
+        });
+        return { tracks, name: response.name };
+      },
+    }),
+   
   }),
 });
 function getUser() {
@@ -33,4 +51,4 @@ function getUser() {
     return null;
   }
 }
-export const { useGetAllTracksQuery } = trackApi;
+export const { useGetAllTracksQuery, useGetCategoryTracksQuery } = trackApi;
