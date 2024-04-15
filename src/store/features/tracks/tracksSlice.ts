@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TTrack } from "../../../types";
+import { TFilterName, TTrack } from "../../../types";
 
 type TTracksState = {
   track: null | TTrack;
@@ -45,7 +45,11 @@ const tracksSlice = createSlice({
       if (filterName === "order") {
         state.filters.order = filterValue || state.filters.order;
       } else {
-        if (state.filters[filterName].includes(filterValue.toLowerCase())) {
+        if (
+          state.filters[filterName as TFilterName].includes(
+            filterValue.toLowerCase()
+          )
+        ) {
           state.filters[filterName] = state.filters[filterName].filter(
             (item) => item.toLowerCase() !== filterValue.toLowerCase()
           );

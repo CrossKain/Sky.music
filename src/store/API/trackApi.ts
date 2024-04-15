@@ -9,12 +9,12 @@ export const trackApi = createApi({
   endpoints: (builder) => ({
     getAllTracks: builder.query<TTrack[], void>({
       query: () => "/all/",
-      transformResponse: (response) => {
+      transformResponse: (response: TTrack[]) => {
         const user = getUser();
         let id = user ? user.id : null;
 
         return response.map((track) => {
-          const isLiked = track.stared_user.find((el) => el.id === id);
+          const isLiked = track.stared_user?.find((el) => el.id === id);
           if (isLiked) {
             return { ...track, liked: true };
           } else {

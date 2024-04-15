@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 type Props = {
   list: string[];
-  filterName: string;
+  filterName: "authors" | "genres" | "order";
 };
 export const FilterList = ({ list, filterName }: Props) => {
   const dispatch = useAppDispatch();

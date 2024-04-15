@@ -19,3 +19,7 @@ export type TStaredUser = {
   last_name: string;
   email: string;
 };
+
+export type TFilterName = {
+  filterName: "authors" | "genres" | "order";
+}
