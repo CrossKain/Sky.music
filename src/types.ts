@@ -9,7 +9,7 @@ export type TTrack = {
   logo: null;
   track_file: string;
   stared_user?: TStaredUser[] | null;
-  
+  liked: boolean;
 };
 
 export type TStaredUser = {
@@ -20,6 +20,4 @@ export type TStaredUser = {
   email: string;
 };
 
-export type TFilterName = {
-  filterName: "authors" | "genres" | "order";
-}
+export type TFilterName = "authors" | "genres" | "order";

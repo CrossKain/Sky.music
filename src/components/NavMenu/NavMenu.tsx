@@ -6,7 +6,7 @@ import { useAppSelector } from "../../store/store";
 type TNavMenu = {
   isOpen: boolean;
 };
-export const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
+const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
   const { isAuth } = useAppSelector((state) => state.auth);
   return (
     <>
@@ -30,3 +30,5 @@ export const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
     </>
   );
 };
+
+export default NavMenu

@@ -4,7 +4,7 @@ import { useGetFavoriteTracksQuery } from "../../../store/API/likeApi";
 
 
 const Favorite = () => {
-    const { data } = useGetFavoriteTracksQuery();
+    const { data = [] } = useGetFavoriteTracksQuery();
     return (
         <TrackLayout tracks={data} title="Любимые Треки"/>
     )

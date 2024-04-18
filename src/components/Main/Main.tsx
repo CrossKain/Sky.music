@@ -15,7 +15,7 @@ export default function Main() {
     <>
       <main className={styles.main}>
         <Nav />
-        <CentrBlock  />
+        {/* <CentrBlock  /> */}
         <MainSlideBar />
       </main>
       {track && <Bar />}

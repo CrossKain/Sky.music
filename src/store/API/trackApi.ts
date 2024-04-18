@@ -23,9 +23,9 @@ export const trackApi = createApi({
         });
       },
     }),
-    getCategoryTracks: builder.query<TTrack[], { id: string }>({
+    getCategoryTracks: builder.query<{ tracks: TTrack[]; name: string }, { id: string }>({
       query: ({ id }) => `selection/${id}`,
-      transformResponse: (response: TTrack[]) => {
+      transformResponse: (response: { items: TTrack[]; name: string }) => {
         const user = getUser();
         let id = user ? user.id : null;
 
@@ -40,7 +40,6 @@ export const trackApi = createApi({
         return { tracks, name: response.name };
       },
     }),
-   
   }),
 });
 function getUser() {

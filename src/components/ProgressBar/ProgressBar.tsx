@@ -20,6 +20,7 @@ export default function ProgressBar({ max, value, onChange }: Props) {
       value={value} // Текущее значение ползунка
       step={0.01} // Шаг изменения значения
       onChange={handleChange} // Обработчик события изменения
+      data-testid="progress-bar" // Для тестирования
     />
   );
 }

@@ -10,7 +10,7 @@ import {
 } from "../../store/features/tracks/tracksSlice";
 
 type ContentPlayListProps = {
-  tracks: TTrack[];
+  tracks: TTrack[] | undefined;
   liked?: boolean;
 };
 export default function ContentPlaylist({ tracks }: ContentPlayListProps) {

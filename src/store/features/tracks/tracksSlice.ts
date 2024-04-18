@@ -41,7 +41,7 @@ const tracksSlice = createSlice({
       }
     },
     setFilter: (state, action) => {
-      const { filterName, filterValue } = action.payload;
+      const { filterName, filterValue }: {filterName: TFilterName, filterValue: string} = action.payload;
       if (filterName === "order") {
         state.filters.order = filterValue || state.filters.order;
       } else {

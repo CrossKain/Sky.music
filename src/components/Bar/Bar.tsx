@@ -36,18 +36,20 @@ export default function Bar() {
   useEffect(() => {
     audioRef.current?.play();
   }, []);
-  useEffect(() => {
-    audioRef.current?.addEventListener("pause", () => dispatch(setPause()));
-    audioRef.current?.addEventListener("play", () => dispatch(setPlay()));
-    audioRef.current?.addEventListener("ended", () => dispatch(setNextTrack()));
-    audioRef.current?.addEventListener("timeupdate", updateTime);
-    return () => {
-      audioRef.current?.removeEventListener("timeupdate", updateTime);
-    };
-  }, []);
   const updateTime = useCallback(() => {
     setCurrentTime(audioRef.current!.currentTime);
-  }, []) 
+  }, []);
+  useEffect(() => {
+    const ref = audioRef.current;
+    ref?.addEventListener("pause", () => dispatch(setPause()));
+    ref?.addEventListener("play", () => dispatch(setPlay()));
+    ref?.addEventListener("ended", () => dispatch(setNextTrack()));
+    ref?.addEventListener("timeupdate", updateTime);
+    return () => {
+      ref?.removeEventListener("timeupdate", updateTime);
+    };
+  }, [dispatch, updateTime]);
+
   const handlePlay = () => {
     audioRef.current?.play();
     dispatch(setPlay());
@@ -67,7 +69,7 @@ export default function Bar() {
     if (audioRef.current) {
       audioRef.current.volume = value / 100;
     }
-  }, [])
+  }, []);
   const rewindTrack = (value: number) => {
     setCurrentTime(value);
     if (audioRef.current) {

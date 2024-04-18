@@ -6,19 +6,16 @@ import FilterBlock from "@components/FilterBlock/FilterBlock";
 import { TTrack } from "../../types";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import {
-  setInitialTracks,
-  setSearch,
-} from "../../store/features/tracks/tracksSlice";
-import { useGetAllTracksQuery } from "../../store/API/trackApi";
+import { setSearch } from "../../store/features/tracks/tracksSlice";
+
 type Props = {
-  setTrack: (param: TTrack) => void;
+  tracks: TTrack[] | undefined;
+  title: string | undefined;
 };
-export default function CentrBlock({ tracks, title }) {
+export default function CentrBlock({ tracks, title }: Props) {
   const dispatch = useAppDispatch();
   const { filteredTracks, filters } = useAppSelector((state) => state.tracks);
   const [searchValue, setSearchValue] = useState("");
- 
 
   const filterTracks = () => {
     let array: TTrack[] = [...filteredTracks];
@@ -55,15 +52,9 @@ export default function CentrBlock({ tracks, title }) {
     return array;
   };
   const trackArray = filterTracks();
-  // useEffect(() => {
-  //   if (tracks) {
-  //     dispatch(setInitialTracks(tracks));
-  //     dispatch(setSearch({ searchValue }));
-  //   }
-  // }, [tracks]);
   useEffect(() => {
     dispatch(setSearch({ searchValue }));
-  }, [searchValue]);
+  }, [searchValue, dispatch]);
   return (
     <div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
       <div className={classNames(styles.centerBlockSearch, styles.search)}>
