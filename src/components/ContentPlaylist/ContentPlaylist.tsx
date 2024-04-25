@@ -12,8 +12,9 @@ import {
 type ContentPlayListProps = {
   tracks: TTrack[] | undefined;
   liked?: boolean;
+  isLoading: boolean;
 };
-export default function ContentPlaylist({ tracks }: ContentPlayListProps) {
+export default function ContentPlaylist({ tracks, isLoading }: ContentPlayListProps) {
   const dispatch = useAppDispatch();
   const { track } = useAppSelector((state) => state.tracks);
   const handleClick = (item: TTrack) => {
@@ -22,19 +23,21 @@ export default function ContentPlaylist({ tracks }: ContentPlayListProps) {
   };
   return (
     <div className={classNames(styles.contentPlaylist, styles.playlist)}>
-      {tracks?.map((item) => (
-        <PlayListItem
-          setTrack={() => handleClick(item)}
-          key={item.id}
-          name={item.name}
-          author={item.author}
-          album={item.album}
-          time={item.duration_in_seconds}
-          isCurrentTrack={item.id === track?.id}
-          liked={item.liked}
-          id={item.id}
-        />
-      ))}
+      {isLoading ? "Идет Загрузка" : tracks?.length
+        ? tracks?.map((item) => (
+            <PlayListItem
+              setTrack={() => handleClick(item)}
+              key={item.id}
+              name={item.name}
+              author={item.author}
+              album={item.album}
+              time={item.duration_in_seconds}
+              isCurrentTrack={item.id === track?.id}
+              liked={item.liked}
+              id={item.id}
+            />
+          ))
+        : "У Вас нет треков"}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@components/Nav/Nav.module.css";
 import classNames from "classnames";
 import { useState } from "react";
-import { NavMenu } from "@components/NavMenu/NavMenu";
+import  NavMenu  from "@components/NavMenu/NavMenu";
 
 export default function Nav() {
   const [isOpen, isSetOpen] = useState<boolean>(false);

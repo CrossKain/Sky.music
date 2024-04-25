@@ -160,8 +160,8 @@
   }
   
   .trackTimeSvg {
-    width: 14px;
-    height: 12px;
+    width: 16px;
+    height: 14px;
     margin-right: 17px;
     fill: transparent;
     stroke: #696969;
@@ -195,3 +195,7 @@ background: rgb(0, 123, 255);
     animation: trackAnimation ease-in-out 2s infinite;
   }
  
+  .likeButton{
+    background-color: transparent;
+    border: 0;
+  }

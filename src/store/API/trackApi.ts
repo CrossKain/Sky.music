@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TTrack } from "../../types";
 
+
 export const trackApi = createApi({
   reducerPath: "trackApi",
   baseQuery: fetchBaseQuery({
@@ -9,7 +10,9 @@ export const trackApi = createApi({
   endpoints: (builder) => ({
     getAllTracks: builder.query<TTrack[], void>({
       query: () => "track/all/",
+      providesTags: (result: TTrack[])=> result ? [...result.map(item => ({type: "track", id: item.id}))] : ["track"],
       transformResponse: (response: TTrack[]) => {
+        
         const user = getUser();
         let id = user ? user.id : null;
 

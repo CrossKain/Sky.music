@@ -7,12 +7,21 @@ import { TTrack } from "../../types";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { setSearch } from "../../store/features/tracks/tracksSlice";
+import Search from "@components/Search/Search";
 
 type Props = {
   tracks: TTrack[] | undefined;
   title: string | undefined;
+  isFavorite?: boolean;
+  isLoading: boolean;
 };
-export default function CentrBlock({ tracks, title }: Props) {
+export default function CentrBlock({
+  tracks,
+  title,
+  isFavorite,
+  isLoading,
+}: Props) {
+  const isAuth = useAppSelector((state) => state.auth.isAuth);
   const dispatch = useAppDispatch();
   const { filteredTracks, filters } = useAppSelector((state) => state.tracks);
   const [searchValue, setSearchValue] = useState("");
@@ -57,21 +66,9 @@ export default function CentrBlock({ tracks, title }: Props) {
   }, [searchValue, dispatch]);
   return (
     <div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
-      <div className={classNames(styles.centerBlockSearch, styles.search)}>
-        <svg className={styles.searchSvg}>
-          <use href="/image/icon/sprite.svg#icon-search"></use>
-        </svg>
-        <input
-          onChange={(event) => setSearchValue(event.target.value)}
-          value={searchValue}
-          className={styles.searchText}
-          type="search"
-          placeholder="Поиск"
-          name="search"
-        />
-      </div>
+      <Search />
       <h2 className={styles.centerBlockH2}>{title}</h2>
-      <FilterBlock tracks={tracks} />
+      <FilterBlock />
       <div
         className={classNames(
           styles.centerBlockContent,
@@ -94,7 +91,11 @@ export default function CentrBlock({ tracks, title }: Props) {
             </svg>
           </div>
         </div>
-        <ContentPlaylist tracks={tracks} />
+        {isFavorite && !isAuth ? (
+          "У вас нет авторизации"
+        ) : (
+          <ContentPlaylist isLoading={isLoading} tracks={tracks} />
+        )}
       </div>
     </div>
   );

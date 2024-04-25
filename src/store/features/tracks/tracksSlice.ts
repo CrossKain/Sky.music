@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TFilterName, TTrack } from "../../../types";
+import { trackApi } from "../../API/trackApi";
 
 type TTracksState = {
   track: null | TTrack;
@@ -101,7 +102,12 @@ const tracksSlice = createSlice({
       state.track = action.payload;
       state.isPlaying = true;
     },
-  },
+  }, extraReducers: builder=>{
+    builder.addMatcher(trackApi.endpoints.getAllTracks.matchFulfilled, (state, {payload}) => {
+      state.filteredTracks = payload;
+      state.initialTracks = payload;
+    })
+  }
 });
 
 export const {

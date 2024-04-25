@@ -17,7 +17,8 @@ type Props = {
   tracks: TTrack[] | undefined;
 };
 
-export default function FilterBlock({ tracks }: Props) {
+export default function FilterBlock() {
+  const { initialTracks } = useAppSelector((state) => state.tracks);
   const [authorList, setAuthorList] = useState<string[]>([]);
   const [ganresList, setGanresList] = useState<string[]>([]);
   const { filters } = useAppSelector((state) => state.tracks);
@@ -30,15 +31,16 @@ export default function FilterBlock({ tracks }: Props) {
     }
   };
   useEffect(() => {
-    if (tracks?.length) {
-      const authorsArray = tracks.map((track) => track.author);
+    if (initialTracks?.length) {
+      const authorsArray = initialTracks.map((track) => track.author);
+      initialTracks;
       const authors = new Set(authorsArray);
       setAuthorList(Array.from(authors));
-      const ganresArray = tracks.map((track) => track.genre);
+      const ganresArray = initialTracks.map((track) => track.genre);
       const ganres = new Set(ganresArray);
       setGanresList(Array.from(ganres));
     }
-  }, [tracks]);
+  }, [initialTracks]);
 
   return (
     <div className={classNames(styles.centerBlockFilter, styles.filter)}>

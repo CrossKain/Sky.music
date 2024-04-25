@@ -16,27 +16,27 @@ export const likeApi = createApi({
   endpoints: (builder) => ({
     setLike: builder.mutation({
       query: ({ id }) => ({ url: `${id}/favorite/`, method: "POST" }),
+      invalidatesTags: (result) => [{ type: "favoriteTrack", id: result.id }],
     }),
     setDisLike: builder.mutation({
       query: ({ id }) => ({ url: `${id}/favorite/`, method: "DELETE" }),
+      invalidatesTags: (result) => [{ type: "favoriteTrack", id: result.id }],
     }),
     getFavoriteTracks: builder.query<TTrack[], void>({
       query: () => `/favorite/all`,
+      providesTags: (result: TTrack[]) =>
+        result
+          ? [...result.map((item) => ({ type: "favoriteTrack", id: item.id }))]
+          : ["favoriteTrack"],
       transformResponse: (response: TTrack[]) => {
-       
-
         const tracks = response.map((track) => {
-        
-            return { ...track, liked: true };
-          
+          return { ...track, liked: true };
         });
-        return  tracks;
+        return tracks;
       },
     }),
   }),
 });
-
-
 
 function getToken() {
   try {
@@ -46,4 +46,8 @@ function getToken() {
     return null;
   }
 }
-export const { useSetLikeMutation, useSetDisLikeMutation, useGetFavoriteTracksQuery } = likeApi;
+export const {
+  useSetLikeMutation,
+  useSetDisLikeMutation,
+  useGetFavoriteTracksQuery,
+} = likeApi;

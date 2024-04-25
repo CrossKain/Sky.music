@@ -6,8 +6,11 @@ import classNames from "classnames";
 import { useGetTokenMutation, useLoginMutation } from "../../store/API/authApi";
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "../../store/store";
+import { setAuth, setUser } from "../../store/features/auth/AuthSlice";
 
 export default function SignIn() {
+  const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
   const [getToken] = useGetTokenMutation();
   const [userData, setUserData] = useState({
@@ -25,11 +28,13 @@ export default function SignIn() {
       .unwrap()
       .then((response) => {
         localStorage.setItem("user", JSON.stringify(response)),
-          getToken({ email, password })
-            .unwrap()
-            .then((response) => {
-              localStorage.setItem("token", JSON.stringify(response));
-            });
+          dispatch(setUser(response));
+        getToken({ email, password })
+          .unwrap()
+          .then((response) => {
+            dispatch(setAuth(true));
+            localStorage.setItem("token", JSON.stringify(response));
+          });
         router.push("/");
       })
       .catch((error) => {
@@ -37,49 +42,47 @@ export default function SignIn() {
       });
   };
   return (
-    
-      <div className={styles.containerEnter}>
-        <div className={styles.modalBlock}>
-          <form className={styles.modalFormLogin} action="#">
-            <a href="../">
-              <div className={styles.modalLogo}>
-                <Image
-                  width={140}
-                  height={21}
-                  src="/image/logo_modal.png"
-                  alt="Логотип"
-                />
-              </div>
-            </a>
-            <input
-              value={userData.email}
-              onChange={onChange}
-              className={classNames(styles.modalInput, styles.login)}
-              type="text"
-              name="email"
-              placeholder="Почта"
-            />
-            <input
-              value={userData.password}
-              onChange={onChange}
-              className={classNames(styles.modalInput, styles.password)}
-              type="password"
-              name="password"
-              placeholder="Пароль"
-            />
-            <button
-              type="button"
-              onClick={onClick}
-              className={styles.modalBtnEnter}
-            >
-              Войти
-            </button>
-            <Link href="/signup" className={styles.modalBtnSignup}>
-              Зарегистрироваться
-            </Link>
-          </form>
-        </div>
+    <div className={styles.containerEnter}>
+      <div className={styles.modalBlock}>
+        <form className={styles.modalFormLogin} action="#">
+          <a href="../">
+            <div className={styles.modalLogo}>
+              <Image
+                width={140}
+                height={21}
+                src="/image/logo_modal.png"
+                alt="Логотип"
+              />
+            </div>
+          </a>
+          <input
+            value={userData.email}
+            onChange={onChange}
+            className={classNames(styles.modalInput, styles.login)}
+            type="text"
+            name="email"
+            placeholder="Почта"
+          />
+          <input
+            value={userData.password}
+            onChange={onChange}
+            className={classNames(styles.modalInput, styles.password)}
+            type="password"
+            name="password"
+            placeholder="Пароль"
+          />
+          <button
+            type="button"
+            onClick={onClick}
+            className={styles.modalBtnEnter}
+          >
+            Войти
+          </button>
+          <Link href="/signup" className={styles.modalBtnSignup}>
+            Зарегистрироваться
+          </Link>
+        </form>
       </div>
-   
+    </div>
   );
 }

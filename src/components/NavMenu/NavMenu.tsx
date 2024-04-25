@@ -8,21 +8,29 @@ type TNavMenu = {
 };
 const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
   const { isAuth } = useAppSelector((state) => state.auth);
+  const handleAuthClick = () => {
+    if (isAuth === true) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+  };
   return (
     <>
       {isOpen && (
         <div className={classNames(styles.navMenu, styles.menu)}>
           <ul className={styles.menuList}>
             <li className={styles.menuItem}>
-              <Link href="/tracks" className={styles.menuLink}>
+              <Link href="/" className={styles.menuLink}>
                 Главное
               </Link>
             </li>
             <li className={styles.menuItem}>
-              <Link href="/tracks/favorite"> Мой плейлист</Link>
+              <Link href="/favorite"> Мой плейлист</Link>
             </li>
             <li className={styles.menuItem}>
-              <Link href="/signin">{isAuth ? "Выйти" : "Войти"}</Link>
+              <button className={styles.buttonLink} onClick={handleAuthClick}>
+                <Link href="/signin">{isAuth ? "Выйти" : "Войти"}</Link>
+              </button>
             </li>
           </ul>
         </div>
@@ -31,4 +39,4 @@ const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
   );
 };
 
-export default NavMenu
+export default NavMenu;

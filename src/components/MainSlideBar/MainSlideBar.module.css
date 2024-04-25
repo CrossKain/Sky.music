@@ -83,3 +83,8 @@
     width: 100%;
     height: auto;
   }
+
+  .exitButton{
+    background-color: transparent;
+    border: 0;
+  }

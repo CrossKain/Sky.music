@@ -2,8 +2,12 @@
 import styles from "@components/PlayListItem/PlayListItem.module.css";
 import classNames from "classnames";
 import { TTrack } from "../../types";
-import { useAppSelector } from "../../store/store";
-import { useSetDisLikeMutation, useSetLikeMutation } from "../../store/API/likeApi";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  useSetDisLikeMutation,
+  useSetLikeMutation,
+} from "../../store/API/likeApi";
+import { trackApi } from "../../store/API/trackApi";
 
 type Props = {
   name: string;
@@ -28,13 +32,22 @@ export default function PlayListItem({
   const [like] = useSetLikeMutation();
   const [disLike] = useSetDisLikeMutation();
   const { isPlaying } = useAppSelector((state) => state.tracks);
+  const { isAuth } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
-  const handleLike = () => {
+  const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (isAuth === false) {
+      alert("Авторизируйтесь");
+
+      return;
+    }
     if (liked) {
       disLike({ id });
     } else {
       like({ id });
     }
+    dispatch(trackApi.util.invalidateTags(["track"]));
   };
   return (
     <div onClick={setTrack} className={styles.playlistItem}>
@@ -65,9 +78,17 @@ export default function PlayListItem({
           {album}
         </div>
         <div className={styles.trackTime}>
-          <button type="button" onClick={handleLike}>
+          <button
+            className={styles.likeButton}
+            type="button"
+            onClick={handleLike}
+          >
             <svg className={styles.trackTimeSvg}>
-              <use href="/image/icon/sprite.svg#icon-like"></use>
+              {liked ? (
+                <use href="/image/icon/sprite.svg#icon-like"></use>
+              ) : (
+                <use href="/image/icon/sprite.svg#icon-dislike"></use>
+              )}
             </svg>
           </button>
 
