@@ -1,18 +1,20 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TTrack } from "../../types";
 
-
 export const trackApi = createApi({
   reducerPath: "trackApi",
+  tagTypes: ["track"],
   baseQuery: fetchBaseQuery({
     baseUrl: "https://skypro-music-api.skyeng.tech/catalog/",
   }),
   endpoints: (builder) => ({
     getAllTracks: builder.query<TTrack[], void>({
       query: () => "track/all/",
-      providesTags: (result: TTrack[])=> result ? [...result.map(item => ({type: "track", id: item.id}))] : ["track"],
+      providesTags: (result) =>
+        result
+          ? [...result.map((item) => ({ type: "track" as const, id: item.id }))]
+          : ["track"],
       transformResponse: (response: TTrack[]) => {
-        
         const user = getUser();
         let id = user ? user.id : null;
 
@@ -26,7 +28,10 @@ export const trackApi = createApi({
         });
       },
     }),
-    getCategoryTracks: builder.query<{ tracks: TTrack[]; name: string }, { id: string }>({
+    getCategoryTracks: builder.query<
+      { tracks: TTrack[]; name: string },
+      { id: string }
+    >({
       query: ({ id }) => `selection/${id}`,
       transformResponse: (response: { items: TTrack[]; name: string }) => {
         const user = getUser();

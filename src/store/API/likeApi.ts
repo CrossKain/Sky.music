@@ -3,6 +3,7 @@ import { TTrack } from "../../types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
+  tagTypes: ["favoriteTrack"],
   baseQuery: fetchBaseQuery({
     baseUrl: "https://skypro-music-api.skyeng.tech/catalog/track/",
     prepareHeaders: (headers) => {
@@ -16,17 +17,26 @@ export const likeApi = createApi({
   endpoints: (builder) => ({
     setLike: builder.mutation({
       query: ({ id }) => ({ url: `${id}/favorite/`, method: "POST" }),
-      invalidatesTags: (result) => [{ type: "favoriteTrack", id: result.id }],
+      invalidatesTags: (_, error, arg) => [
+        { type: "favoriteTrack" as const, id: arg!.id },
+      ],
     }),
     setDisLike: builder.mutation({
       query: ({ id }) => ({ url: `${id}/favorite/`, method: "DELETE" }),
-      invalidatesTags: (result) => [{ type: "favoriteTrack", id: result.id }],
+      invalidatesTags: (_, error, arg) => [
+        { type: "favoriteTrack", id: arg.id },
+      ],
     }),
     getFavoriteTracks: builder.query<TTrack[], void>({
       query: () => `/favorite/all`,
-      providesTags: (result: TTrack[]) =>
+      providesTags: (result) =>
         result
-          ? [...result.map((item) => ({ type: "favoriteTrack", id: item.id }))]
+          ? [
+              ...result.map((item) => ({
+                type: "favoriteTrack" as const,
+                id: item.id,
+              })),
+            ]
           : ["favoriteTrack"],
       transformResponse: (response: TTrack[]) => {
         const tracks = response.map((track) => {

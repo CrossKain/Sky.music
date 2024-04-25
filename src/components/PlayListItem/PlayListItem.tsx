@@ -47,7 +47,7 @@ export default function PlayListItem({
     } else {
       like({ id });
     }
-    dispatch(trackApi.util.invalidateTags(["track"]));
+    dispatch(trackApi.util.invalidateTags([{ type: "track", id }]));
   };
   return (
     <div onClick={setTrack} className={styles.playlistItem}>
