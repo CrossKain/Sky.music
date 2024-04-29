@@ -5,15 +5,15 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { useRouter } from "next/navigation";
 import { setAuth } from "../../store/features/auth/AuthSlice";
+import { AuthContext } from "../../context/AuthProvider";
+import { useContext } from "react";
 export default function MainSlideBar() {
   const user = useAppSelector((state) => state.auth.user);
   const navigate = useRouter();
   const dispatch = useAppDispatch();
+  const { logout } = useContext(AuthContext);
   const onClick = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    dispatch(setAuth(false));
-    navigate.push("/signin");
+    logout();
   };
   return (
     <div className={classNames(styles.mainSidebar, styles.sidebar)}>

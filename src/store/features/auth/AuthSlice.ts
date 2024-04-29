@@ -6,7 +6,7 @@ type TAuthState = {
 };
 function checkLs(key: string) {
   try {
-    return JSON.parse(localStorage.getItem(key) || "{}");
+    return JSON.parse(localStorage.getItem(key) || "");
   } catch (error) {
     return false;
   }

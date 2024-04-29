@@ -8,6 +8,8 @@ import {
   useSetLikeMutation,
 } from "../../store/API/likeApi";
 import { trackApi } from "../../store/API/trackApi";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../../context/AuthProvider";
 
 type Props = {
   name: string;
@@ -29,23 +31,29 @@ export default function PlayListItem({
   liked,
   id,
 }: Props) {
-  const [like] = useSetLikeMutation();
-  const [disLike] = useSetDisLikeMutation();
+  const [like, {error: likeError}] = useSetLikeMutation();
+  const [disLike, {error: disLikeError}] = useSetDisLikeMutation();
   const { isPlaying } = useAppSelector((state) => state.tracks);
   const { isAuth } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const {logout} = useContext(AuthContext)
+  useEffect(() => {
+    if (likeError && 'status' in likeError && likeError.status === 401 || disLikeError && 'status' in disLikeError && disLikeError.status === 401){
+      logout()
+    }
+  }, [likeError, disLikeError])
+  const handleLike = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+
     if (isAuth === false) {
       alert("Авторизируйтесь");
 
       return;
     }
     if (liked) {
-      disLike({ id });
+      await disLike({ id });
     } else {
-      like({ id });
+      await like({ id });
     }
     dispatch(trackApi.util.invalidateTags([{ type: "track", id }]));
   };

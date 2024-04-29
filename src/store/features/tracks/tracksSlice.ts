@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TFilterName, TTrack } from "../../../types";
 import { trackApi } from "../../API/trackApi";
+import { likeApi } from "../../API/likeApi";
 
 type TTracksState = {
   track: null | TTrack;
@@ -42,7 +43,10 @@ const tracksSlice = createSlice({
       }
     },
     setFilter: (state, action) => {
-      const { filterName, filterValue }: {filterName: TFilterName, filterValue: string} = action.payload;
+      const {
+        filterName,
+        filterValue,
+      }: { filterName: TFilterName; filterValue: string } = action.payload;
       if (filterName === "order") {
         state.filters.order = filterValue || state.filters.order;
       } else {
@@ -102,12 +106,34 @@ const tracksSlice = createSlice({
       state.track = action.payload;
       state.isPlaying = true;
     },
-  }, extraReducers: builder=>{
-    builder.addMatcher(trackApi.endpoints.getAllTracks.matchFulfilled, (state, {payload}) => {
-      state.filteredTracks = payload;
-      state.initialTracks = payload;
-    })
-  }
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      trackApi.endpoints.getAllTracks.matchFulfilled,
+      (state, { payload }) => {
+        state.filteredTracks = payload;
+        state.initialTracks = payload;
+      }
+    ),
+      builder.addMatcher(
+        likeApi.endpoints.setDisLike.matchFulfilled,
+        (state, { meta }) => {
+          const id = meta.arg.originalArgs.id;
+          if (state.track && id === state.track?.id) {
+            state.track.liked = false;
+          }
+        }
+      ),
+      builder.addMatcher(
+        likeApi.endpoints.setLike.matchFulfilled,
+        (state, { meta }) => {
+          const id = meta.arg.originalArgs.id;
+          if (state.track && id === state.track?.id) {
+            state.track.liked = true;
+          }
+        }
+      );
+  },
 });
 
 export const {

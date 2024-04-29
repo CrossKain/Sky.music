@@ -9,7 +9,7 @@ import CentrBlock from "@components/CentrBlock/CentrBlock";
 
 const MainTracks = () => {
   const dispatch = useAppDispatch();
-  const { data, isLoading } = useGetAllTracksQuery();
+  const { data, isLoading, refetch } = useGetAllTracksQuery();
   const { filteredTracks, filters } = useAppSelector((state) => state.tracks);
   const filterTracks = () => {
     let array: TTrack[] = [...filteredTracks];
@@ -52,6 +52,9 @@ const MainTracks = () => {
       dispatch(setInitialTracks(data));
     }
   }, [data, dispatch]);
+  useEffect(() => {
+    refetch()
+  }, [])
   console.log(trackArray);
   return <CentrBlock isLoading = {isLoading} title="Треки" tracks={trackArray} />;
 };

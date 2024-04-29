@@ -5,7 +5,7 @@ import styles from "./Bar.module.css";
 import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
 import { TTrack } from "../../types";
 import ProgressBar from "@components/ProgressBar/ProgressBar";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { useDispatch } from "react-redux";
 import {
@@ -15,6 +15,12 @@ import {
   setPrevTrack,
   setShuffle,
 } from "../../store/features/tracks/tracksSlice";
+import {
+  useSetDisLikeMutation,
+  useSetLikeMutation,
+} from "../../store/API/likeApi";
+import { trackApi } from "../../store/API/trackApi";
+import { AuthContext } from "../../context/AuthProvider";
 
 type Props = {
   track: TTrack | null;
@@ -27,6 +33,24 @@ export default function Bar() {
   const { track, isPlaying, isShuffle } = useAppSelector(
     (state) => state.tracks
   );
+  const [like, { error: likeError }] = useSetLikeMutation();
+  const [disLike, { error: disLikeError }] = useSetDisLikeMutation();
+  const { isAuth } = useAppSelector((state) => state.auth);
+  const { logout } = useContext(AuthContext);
+  const onClick = async () => {
+    if (isAuth === false) {
+      alert("Авторизируйтесь");
+
+      return;
+    }
+    if (track?.liked) {
+      await disLike({ id: track?.id });
+    } else {
+      await like({ id: track?.id });
+    }
+    dispatch(trackApi.util.invalidateTags([{ type: "track", id: track?.id }]));
+  };
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secondsLeft = Math.floor(seconds % 60);
@@ -49,7 +73,14 @@ export default function Bar() {
       ref?.removeEventListener("timeupdate", updateTime);
     };
   }, [dispatch, updateTime]);
-
+  useEffect(() => {
+    if (
+      (likeError && "status" in likeError && likeError.status === 401) ||
+      (disLikeError && "status" in disLikeError && disLikeError.status === 401)
+    ) {
+      logout();
+    }
+  }, [likeError, disLikeError]);
   const handlePlay = () => {
     audioRef.current?.play();
     dispatch(setPlay());
@@ -172,17 +203,16 @@ export default function Bar() {
 
             <div className={styles.trackPlayLikeDis}>
               <div
+                onClick={onClick}
                 className={classNames(styles.trackPlayLike, styles._btnIcon)}
               >
                 <svg className={styles.trackPlayLikeSvg}>
+                  {track?.liked ? (
+                    <use href="/image/icon/sprite.svg#icon-dislike"></use>
+                  ) : (
+                    <use href="/image/icon/sprite.svg#icon-like"></use>
+                  )}{" "}
                   <use href="/image/icon/sprite.svg#icon-like"></use>
-                </svg>
-              </div>
-              <div
-                className={classNames(styles.trackPlayDislike, styles._btnIcon)}
-              >
-                <svg className={styles.trackPlayDislikeSvg}>
-                  <use href="/image/icon/sprite.svg#icon-dislike"></use>
                 </svg>
               </div>
             </div>

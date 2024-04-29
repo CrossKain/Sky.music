@@ -1,17 +1,18 @@
 import classNames from "classnames";
 import styles from "@components/NavMenu/NavMenu.module.css";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useAppSelector } from "../../store/store";
+import { AuthContext } from "../../context/AuthProvider";
 type TNavMenu = {
   isOpen: boolean;
 };
 const NavMenu: FC<TNavMenu> = ({ isOpen }) => {
   const { isAuth } = useAppSelector((state) => state.auth);
+  const { logout } = useContext(AuthContext);
   const handleAuthClick = () => {
     if (isAuth === true) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      logout()
     }
   };
   return (
